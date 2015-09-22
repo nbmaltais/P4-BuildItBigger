@@ -17,7 +17,7 @@ public class JokeSource {
 
     public String tellJoke()
     {
-        double i = Math.random();
+        double i = Math.random() * mJokes.length;
         if(i<0) i=-i;
         int idx = (int)i % mJokes.length;
         return mJokes[idx];
