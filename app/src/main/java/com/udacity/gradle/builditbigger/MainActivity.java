@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.udacity.gradle.builditbigger.jokesource.JokeSource;
+import com.udacity.gradle.builditbigger.jokeui.Joke;
+import com.udacity.gradle.builditbigger.jokeui.JokeActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -56,9 +58,11 @@ public class MainActivity extends AppCompatActivity {
     public void tellJoke(View view){
 
         JokeSource js = new JokeSource();
-        String joke = js.tellJoke();
+        String jokeText = js.tellJoke();
 
-        Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
+        JokeActivity.start(this, new Joke(jokeText));
+
+        //Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
     }
 
 
