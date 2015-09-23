@@ -7,14 +7,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.udacity.gradle.builditbigger.backend.jokeApi.model.JokeBean;
 import com.udacity.gradle.builditbigger.jokeui.Joke;
 import com.udacity.gradle.builditbigger.jokeui.JokeActivity;
 
-
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by Nicolas on 2015-09-22.
+ * Base class for main activity. Free version can overide methods to show ads.
+ */
+public class MainActivityBase extends AppCompatActivity {
 
     static final String TAG = MainActivity.class.getSimpleName();
 
@@ -23,15 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("6D50F110DA53465EFAB0C36D381C8A13")
-                .build();
-        mAdView.loadAd(adRequest);
     }
 
 
@@ -68,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             void onError() {
-                Toast.makeText(MainActivity.this, "Joke API failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivityBase.this, "Joke API failed", Toast.LENGTH_SHORT).show();
             }
         };
 
         task.execute();
     }
 
-    private void showJoke( String jokeText )
+    protected void showJoke( String jokeText )
     {
         JokeActivity.start(this, new Joke(jokeText));
     }

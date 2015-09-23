@@ -36,10 +36,11 @@ public class JokeApiTest extends AndroidTestCase {
 
     public void testAsyncTask()
     {
+        // object to synhronize with the async task
         final Synchronizer sync = new Synchronizer();
         String rootUrl = "http://192.168.1.30:8080/_ah/api/";
 
-
+        // Create the task
         JokeEndpointsAsyncTask task = new JokeEndpointsAsyncTask(rootUrl) {
             @Override
             void onJokeLoaded(JokeBean joke) {
@@ -54,6 +55,7 @@ public class JokeApiTest extends AndroidTestCase {
             }
         };
 
+        // Execute and wait
         task.execute();
         sync.doWait();
 
