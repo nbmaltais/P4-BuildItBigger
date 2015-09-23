@@ -1,8 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -40,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("6D50F110DA53465EFAB0C36D381C8A13")
                 .build();
         mAdView.loadAd(adRequest);
     }
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJokeClicked(View view){
 
-        new JokendpointsAsyncTask().execute();
+        new JokeEndpointsAsyncTask().execute();
     }
 
     private void showJoke( String jokeText )
@@ -78,14 +77,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    class JokendpointsAsyncTask extends AsyncTask<Void,Void,JokeBean> {
+    class JokeEndpointsAsyncTask extends AsyncTask<Void,Void,JokeBean> {
         private JokeApi mJokeService = null;
 
         @Override
         protected JokeBean doInBackground(Void... args) {
             if(mJokeService == null) {  // Only do this once
 
-                String rootUrl = "http://10.0.2.2:8080/_ah/api/";
+                String rootUrl = getString(R.string.joke_api_url);
+                Log.d(TAG,"Creating joke service at " + rootUrl);
 
                 JokeApi.Builder builder = new JokeApi.Builder(AndroidHttp.newCompatibleTransport(),
                         new AndroidJsonFactory(), null)
@@ -106,11 +106,12 @@ public class MainActivity extends AppCompatActivity {
 
 
             try {
+                Log.i(TAG,"Fetching joke.");
                 JokeBean joke =  mJokeService.getJoke(0).execute();
                 return joke;
             }
             catch (IOException e) {
-                Log.e(TAG,"Api error",e);
+                Log.e(TAG,"Joke Api error",e);
                 return null;
             }
         }
