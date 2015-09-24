@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.udacity.gradle.builditbigger.backend.jokeApi.model.JokeBean;
 import com.udacity.gradle.builditbigger.jokeui.Joke;
 import com.udacity.gradle.builditbigger.jokeui.JokeActivity;
+import com.udacity.gradle.builditbigger.jokeui.JokeFragment;
 
 /**
  * Created by Nicolas on 2015-09-22.
@@ -18,12 +19,14 @@ import com.udacity.gradle.builditbigger.jokeui.JokeActivity;
 public class MainActivityBase extends AppCompatActivity {
 
     static final String TAG = MainActivity.class.getSimpleName();
+    MainActivityFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mFragment = (MainActivityFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
     }
 
 
@@ -55,15 +58,18 @@ public class MainActivityBase extends AppCompatActivity {
 
             @Override
             void onJokeLoaded(JokeBean joke) {
+                mFragment.setLoading(false);
                 showJoke(joke.getData());
             }
 
             @Override
             void onError() {
+                mFragment.setLoading(false);
                 Toast.makeText(MainActivityBase.this, "Joke API failed", Toast.LENGTH_SHORT).show();
             }
         };
 
+        mFragment.setLoading(true);
         task.execute();
     }
 
