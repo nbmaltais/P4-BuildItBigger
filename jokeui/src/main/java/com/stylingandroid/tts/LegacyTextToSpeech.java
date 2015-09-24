@@ -22,4 +22,13 @@ class LegacyTextToSpeech extends TextToSpeechCompat {
         }
         return getTextToSpeech().speak(text.toString(), queueMode, (HashMap<String, String>) params);
     }
+
+    @Override
+    protected int silence(int timems, int queueMode, String utteranceId) {
+        Map<String, String> params = new HashMap<>();
+        if (utteranceId != null) {
+            params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+        }
+        return getTextToSpeech().playSilence(timems, queueMode, (HashMap<String, String>)params);
+    }
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stylingandroid.tts.TextToSpeechCompat;
+import com.udacity.gradle.builditbigger.jokeui.view.TypeWriter;
 
 import java.util.Locale;
 
@@ -22,7 +23,7 @@ public class JokeFragment extends Fragment {
     static final String TAG=JokeFragment.class.getSimpleName();
     private static final String KEY_JOKE = "com.udacity.gradle.builditbigger.jokeui.JOKE";
 
-    private TextView mJokeView;
+    private TypeWriter mJokeView;
     private Joke mJoke;
     private TextToSpeechCompat mTts;
     private boolean mTtsAvailable = false;
@@ -57,7 +58,8 @@ public class JokeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_joke, container, false);
-        mJokeView = (TextView)root.findViewById(R.id.jokeView);
+        mJokeView = (TypeWriter)root.findViewById(R.id.jokeView);
+        mJokeView.setCharacterDelay(20);
 
         Bundle args= getArguments();
         if(args!=null)
@@ -75,7 +77,7 @@ public class JokeFragment extends Fragment {
             return;
 
         mJoke=joke;
-        mJokeView.setText(joke.getText());
+        mJokeView.animateText(joke.getFullText());
 
         if(mTtsAvailable)
             speakJoke();
@@ -86,6 +88,10 @@ public class JokeFragment extends Fragment {
             return;
 
         mTts.speak(mJoke.getText(),TextToSpeech.QUEUE_ADD);
+        if(mJoke.hasPunch()) {
+            mTts.silence(1000, TextToSpeech.QUEUE_ADD);
+            mTts.speak(mJoke.getPunch(), TextToSpeech.QUEUE_ADD);
+        }
     }
 
     public void setJokeFromIntent(Intent intent) {

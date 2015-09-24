@@ -57,7 +57,14 @@ public abstract class TextToSpeechCompat {
         return speak(text, queueMode, utteranceId);
     }
 
+    public int silence( int ms, int queueMode )
+    {
+        String utteranceId = getUtteranceId();
+        return silence(ms,queueMode,utteranceId);
+    }
+
     protected abstract int speak(CharSequence text, int queueMode, String utteranceId);
+    protected abstract int silence(int timems, int queueMode, String utteranceId);
 
     public void shutdown() {
         textToSpeech.shutdown();

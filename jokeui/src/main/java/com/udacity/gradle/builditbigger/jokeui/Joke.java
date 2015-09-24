@@ -8,14 +8,36 @@ import android.os.Parcelable;
  */
 public class Joke implements Parcelable {
     private final String mText;
+    private String mPunch;
 
     public Joke(String text)
     {
-        mText =text;
+        int i = text.indexOf('?');
+
+        if(i!=-1) {
+            mText = text.substring(0, i+1).trim();
+            mPunch = text.substring(i + 1).trim();
+        }
+        else
+        {
+            mText=text;
+
+        }
     }
 
     public String getText() {
         return mText;
+    }
+    public String getPunch() {
+        return mPunch;
+    }
+
+    public String getFullText()
+    {
+        if(mPunch!=null)
+            return mText + "\n\n" + mPunch;
+        else
+            return mText;
     }
 
     @Override
@@ -26,13 +48,15 @@ public class Joke implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.mText);
+        dest.writeString(this.mPunch);
     }
 
     protected Joke(Parcel in) {
         this.mText = in.readString();
+        this.mPunch = in.readString();
     }
 
-    public static final Parcelable.Creator<Joke> CREATOR = new Parcelable.Creator<Joke>() {
+    public static final Creator<Joke> CREATOR = new Creator<Joke>() {
         public Joke createFromParcel(Parcel source) {
             return new Joke(source);
         }
@@ -41,4 +65,8 @@ public class Joke implements Parcelable {
             return new Joke[size];
         }
     };
+
+    public boolean hasPunch() {
+        return mPunch!=null && !mPunch.isEmpty();
+    }
 }

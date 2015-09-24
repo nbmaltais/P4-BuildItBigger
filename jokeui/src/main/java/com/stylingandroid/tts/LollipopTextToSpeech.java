@@ -16,4 +16,9 @@ public class LollipopTextToSpeech extends TextToSpeechCompat {
     public int speak(CharSequence text, int queueMode, String utteranceId) {
         return getTextToSpeech().speak(text, queueMode, null, utteranceId);
     }
+
+    @Override
+    protected int silence(int timems, int queueMode, String utteranceId) {
+        return getTextToSpeech().playSilentUtterance(timems,queueMode,utteranceId);
+    }
 }
