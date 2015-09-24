@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,5 +79,15 @@ public class MainActivityBase extends AppCompatActivity {
         JokeActivity.start(this, new Joke(jokeText));
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG,"onDestroy");
+        super.onDestroy();
+    }
 
+    @Override
+    protected void onStop() {
+        Log.d(TAG,"onStop");
+        super.onStop();
+    }
 }

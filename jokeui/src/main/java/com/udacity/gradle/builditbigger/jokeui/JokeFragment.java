@@ -1,12 +1,18 @@
 package com.udacity.gradle.builditbigger.jokeui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.stylingandroid.tts.TextToSpeechCompat;
+
+import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -17,6 +23,9 @@ public class JokeFragment extends Fragment {
     private static final String KEY_JOKE = "com.udacity.gradle.builditbigger.jokeui.JOKE";
 
     private TextView mJokeView;
+    private Joke mJoke;
+    private TextToSpeechCompat mTts;
+    private boolean mTtsAvailable = false;
 
     static public void fillIntent(Intent intent, Joke joke)
     {
@@ -24,6 +33,24 @@ public class JokeFragment extends Fragment {
     }
 
     public JokeFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mTts =  TextToSpeechCompat.newInstance(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS)
+                {
+                    mTtsAvailable=true;
+                    mTts.setLanguage(Locale.ENGLISH);
+                    if(mJoke!=null)
+                        speakJoke();
+                }
+            }
+        });
     }
 
     @Override
@@ -47,11 +74,28 @@ public class JokeFragment extends Fragment {
         if(joke==null)
             return;
 
+        mJoke=joke;
         mJokeView.setText(joke.getText());
+
+        if(mTtsAvailable)
+            speakJoke();
+    }
+
+    private void speakJoke() {
+        if(mJoke==null || mTtsAvailable==false)
+            return;
+
+        mTts.speak(mJoke.getText(),TextToSpeech.QUEUE_ADD);
     }
 
     public void setJokeFromIntent(Intent intent) {
         Joke joke = intent.getParcelableExtra(KEY_JOKE);
         setJoke(joke);
+    }
+
+    @Override
+    public void onDestroy() {
+        mTts.shutdown();
+        super.onDestroy();
     }
 }
