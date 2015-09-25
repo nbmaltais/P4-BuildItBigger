@@ -17,3 +17,35 @@ allprojects {
         jcenter()
     }
 }
+
+// Starts the appEngineRun task in daemon mode
+task appEngineRunWrapper {
+	
+	evaluationDependsOn ":backend"
+	dependsOn ":backend:appengineRun"
+
+	project(":backend"){
+		appengine{
+			daemon true
+		}
+	}
+}
+
+// Starts the appengineStop task and specify it must be executed after androidTestWrapper
+task appEngineStopWrapper {
+    dependsOn ':backend:appengineStop'
+    shouldRunAfter 'androidTestWrapper'
+}
+
+// Starts the connectedAndroidTest task and specify it must be executed after appEngineRunWrapper
+task androidTestWrapper {
+    dependsOn ':app:connectedAndroidTest'
+    shouldRunAfter 'appEngineRunWrapper'
+}
+
+// Run the tests
+task testWithBackend {
+    group 'Udacity'
+    dependsOn =['appEngineRunWrapper','appEngineStopWrapper','androidTestWrapper']
+}
+
