@@ -33,7 +33,6 @@
             android:background="?attr/colorAccent"
             android:layout_below="@+id/instructions_text_view"
             android:layout_gravity="center"
-            android:onClick="tellJokeClicked"
             android:text="@string/button_text"
             tools:visibility="visible"
             />

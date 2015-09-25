@@ -28,6 +28,9 @@ public class MainActivityBase extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mFragment = (MainActivityFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+        // Prepare TTS
+        JokeFragment.initTextToSpeech(this);
     }
 
 
@@ -51,27 +54,6 @@ public class MainActivityBase extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void tellJokeClicked(View view){
-        String rootUrl = getString(R.string.joke_api_url);
-        JokeEndpointsAsyncTask task = new JokeEndpointsAsyncTask(rootUrl) {
-
-            @Override
-            void onJokeLoaded(JokeBean joke) {
-                mFragment.setLoading(false);
-                showJoke(joke.getData());
-            }
-
-            @Override
-            void onError() {
-                mFragment.setLoading(false);
-                Toast.makeText(MainActivityBase.this, "Joke API failed", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        mFragment.setLoading(true);
-        task.execute();
     }
 
     protected void showJoke( String jokeText )

@@ -28,7 +28,7 @@ public class JokeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_joke);
 
         JokeFragment fragment = (JokeFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
-        fragment.setJokeFromIntent(getIntent());
+        fragment.setJokeFromIntent(getIntent(), savedInstanceState==null);
     }
 
 

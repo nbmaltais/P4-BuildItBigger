@@ -6,7 +6,7 @@ public class JokeSource {
 
     private String[] mJokes = new String[]{
             // This one is from from https://funnyjokesandlaughs.wordpress.com/category/open-source/
-            "If at first you don’t succeed at installing your OS, try, try again. If it keeps failing on you, ask yourself why you bought that Microsoft product.",
+            "If at first you don't succeed at installing your OS, try, try again. If it keeps failing on you, ask yourself why you bought that Microsoft product.",
             // Those are from http://academictips.org/funny-jokes/42-funny-one-liners/
             "Why do men find it difficult to make eye contact? Breasts don't have eyes.",
             "How do you get a sweet 80-year-old lady to say the F word? Get another sweet little 80-year-old lady to yell BINGO!",

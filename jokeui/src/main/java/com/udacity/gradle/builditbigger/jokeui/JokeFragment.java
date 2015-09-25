@@ -25,13 +25,29 @@ public class JokeFragment extends Fragment {
 
     private TypeWriter mJokeView;
     private Joke mJoke;
-    private TextToSpeechCompat mTts;
-    private boolean mTtsAvailable = false;
+    static private TextToSpeechCompat mTts=null;
+    static private boolean mTtsAvailable = false;
 
     static public void fillIntent(Intent intent, Joke joke)
     {
         intent.putExtra(KEY_JOKE,joke);
     }
+
+    public static void initTextToSpeech( Context ctx)
+    {
+        if(mTts==null) {
+            mTts = TextToSpeechCompat.newInstance(ctx.getApplicationContext(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS) {
+                        mTtsAvailable = true;
+                        mTts.setLanguage(Locale.ENGLISH);
+                    }
+                }
+            });
+        }
+    }
+
 
     public JokeFragment() {
     }
@@ -40,18 +56,19 @@ public class JokeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mTts =  TextToSpeechCompat.newInstance(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status == TextToSpeech.SUCCESS)
-                {
-                    mTtsAvailable=true;
-                    mTts.setLanguage(Locale.ENGLISH);
-                    if(mJoke!=null)
-                        speakJoke();
+        if(mTts==null) {
+            mTts = TextToSpeechCompat.newInstance(context.getApplicationContext(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS) {
+                        mTtsAvailable = true;
+                        mTts.setLanguage(Locale.ENGLISH);
+                        if (mJoke != null)
+                            speakJoke();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -65,21 +82,24 @@ public class JokeFragment extends Fragment {
         if(args!=null)
         {
             Joke joke = args.getParcelable(KEY_JOKE);
-            setJoke(joke);
+            setJoke(joke, savedInstanceState==null);
         }
 
         return root;
     }
 
-    public void setJoke(Joke joke)
+    public void setJoke(Joke joke, boolean animate)
     {
         if(joke==null)
             return;
 
         mJoke=joke;
-        mJokeView.animateText(joke.getFullText());
+        if(animate)
+            mJokeView.animateText(joke.getFullText());
+        else
+            mJokeView.setText(joke.getFullText());
 
-        if(mTtsAvailable)
+        if(mTtsAvailable && animate)
             speakJoke();
     }
 
@@ -94,14 +114,14 @@ public class JokeFragment extends Fragment {
         }
     }
 
-    public void setJokeFromIntent(Intent intent) {
+    public void setJokeFromIntent(Intent intent,boolean animate) {
         Joke joke = intent.getParcelableExtra(KEY_JOKE);
-        setJoke(joke);
+        setJoke(joke,animate);
     }
 
     @Override
     public void onDestroy() {
-        mTts.shutdown();
+        //mTts.shutdown();
         super.onDestroy();
     }
 }
