@@ -14,7 +14,7 @@ public class JokeSource {
             "A day without sunshine is like, night.",
             "For Sale: Parachute. Only used once, never opened.",
             "A bank is a place that will lend you money, if you can prove that you don't need it.",
-            "What is faster Hot or cold? Hot, because you can catch a cold.",
+            "What is faster, Hot or cold? Hot, because you can catch a cold.",
             "What's the difference between a new husband and a new dog? After a year, the dog is still excited to see you.",
             "Why is it so hard for women to find men that are sensitive, caring, and good-looking? Because those men already have boyfriends."
 

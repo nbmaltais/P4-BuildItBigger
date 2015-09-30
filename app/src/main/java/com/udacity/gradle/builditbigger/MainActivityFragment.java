@@ -66,6 +66,13 @@ public class MainActivityFragment extends Fragment {
     }
 
     public void tellJokeClicked(){
+
+        if(!Utils.isNetworkAvailable(getActivity()))
+        {
+            Toast.makeText(getActivity(),R.string.no_network,Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String rootUrl = getString(R.string.joke_api_url);
         JokeEndpointsAsyncTask task = new JokeEndpointsAsyncTask(rootUrl) {
 
@@ -85,6 +92,7 @@ public class MainActivityFragment extends Fragment {
         mButton.animate()
                 .scaleX(0)
                 .scaleY(0)
+                .rotationBy(180)
                 .setInterpolator(new BounceInterpolator())
                 .setListener(new Animator.AnimatorListener() {
                     @Override
@@ -97,6 +105,7 @@ public class MainActivityFragment extends Fragment {
                         setLoading(true);
                         mButton.setScaleX(1);
                         mButton.setScaleY(1);
+                        mButton.setRotation(0);
                     }
 
                     @Override

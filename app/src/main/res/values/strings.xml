@@ -8,4 +8,5 @@
     <!--<string name="joke_api_url">http://10.0.2.2:8080/_ah/api/</string>-->
     <string name="joke_api_url">http://192.168.1.30:8080/_ah/api/</string>
     <string name="interstitial_ad_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="no_network">Network must be available to tell joke.</string>
 </resources>
